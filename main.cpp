@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cctype> // Pour les caractère en majuscule et en minuscule
+
 
 int longueur(const char* chaine) {
     int compteur = 0;
@@ -52,21 +54,69 @@ int compare(const char *chaine1, const char *chaine2) {
     
 }
 
-char *cherche_char(const char *chaine, char caratere)
-
-    while (*chaine != "/0")
-    {
-        if (*chaine == caratere)
-        {
-            return chaine;
+char *cherche_char(const char *chaine, char caractere) {
+    while (*chaine) {
+        if (*chaine == caractere) {
+            return const_cast<char*>(chaine); // Retourne un pointeur vers la première occurrence
         }
-        return nullptr
+        chaine++;
     }
+    return nullptr; // Retourne nullptr si le caractère n'est pas trouvé
+}
     
-    void inversion ( char *chaine)
+void inverse(char *chaine) {
+    int longueur = 0;
+    while (chaine[longueur] != '\0') {
+        longueur++;
+    }
+
+    for (int i = 0; i < longueur / 2; i++) {
+        char temp = chaine[i];
+        chaine[i] = chaine[longueur - i - 1];
+        chaine[longueur - i - 1] = temp;
+    }
+}
+
+void to_upper(char *chaine) {
+    while (*chaine) {
+        *chaine = std::toupper(*chaine);
+        chaine++;
+    }
+}
+
+void to_lower(char *chaine) {
+    while (*chaine) {
+        *chaine = std::tolower(*chaine);
+        chaine++;
+    }
+}
 
 
-    
+char *cherche_mot(const char *phrase, const char *mot) {
+    while (*phrase) {
+        const char *p = phrase;
+        const char *m = mot;
+
+        while (*m && *p == *m) {
+            p++;
+            m++;
+        }
+
+        if (*m == '\0') {
+            return const_cast<char*>(phrase); // Le mot est trouvé
+        }
+        phrase++;
+    }
+    return nullptr; // Retourne nullptr si le mot n'est pas trouvé
+}
+
+
+void sous_chaine(const char *source, char *dest, int debut, int longueur) {
+    for (int i = 0; i < longueur; i++) {
+        dest[i] = source[debut + i];
+    }
+    dest[longueur] = '\0'; // Terminer la chaîne avec '\0'
+}
 
 int main() {
 
@@ -105,41 +155,98 @@ int main() {
         // Afficher la chaîne concaténée
         std::cout << "La chaîne concaténée est : " << dest << std::endl;
 
-        //Exercice 4 : Comparaison de chaines
-        char chaine [200];
+    //Exercice 4 : Comparaison de chaines
+        char chaine [100];
 
         std::cout << "Entrez la  chaîne  : ";
-        std::cin.getline(chaine1, sizeof(chaine));
+        std::cin.getline(chaine, sizeof(chaine));
 
-        const char* result = recherche_
-        if (resultat == 0) {
+        const char *com_result = chaine;
+        if (com_result == nullptr) {
         std::cout << "0" << std::endl;
-        } else if (resultat > 0) {
+        } else if (com_result != nullptr) {
         std::cout << "positif" << std::endl;
+        } 
+
+    //Exercice 5
+        char caractere;
+
+        std::cout << "Entrez une chaîne : ";
+        std::cin.getline(chaine, 100);
+
+        std::cout << "Entrez un caractère à rechercher : ";
+        std::cin >> caractere;
+
+        char *result = cherche_char(chaine, caractere);
+
+        if (result) {
+            std::cout << "Le caractère '" << caractere << "' est trouvé à la position : " 
+                    << result - chaine << std::endl;
         } else {
-        std::cout << "negatif" << std::endl;
+            std::cout << "Caractère non trouvé." << std::endl;
         }
 
-        //Exercice 5
-        char chaine1 [200];
-        char chaine2 [200];
+    // Exercice 6
 
-        std::cout << "Entrez la première chaîne pour comparaison : ";
-        std::cin.getline(chaine1, sizeof(chaine1));
-        std::cout << "Entrez la deuxième chaîne pour comparaison : ";
-        std::cin.getline(chaine2, sizeof(chaine2));
+        std::cout << "Entrez une chaîne à inverser : ";
+        std::cin.getline(chaine, sizeof(chaine));
 
+        inverse(chaine);
 
-        // Exercice 6
+        std::cout << "La chaîne inversée est : " << chaine << std::endl;
 
 
-        // Exercice 7
+    // Exercice 7
+        char choix;
+
+        std::cout << "Entrez une chaîne : ";
+        std::cin.getline(chaine, 100);
+
+        std::cout << "Choisissez 'M' pour majuscules ou 'm' pour minuscules : ";
+        std::cin >> choix;
+
+        if (choix == 'M' || choix == 'm') {
+            to_upper(chaine);
+            std::cout << "Chaîne en majuscules : " << chaine << std::endl;
+        } else if (choix == 'M' || choix == 'm') {
+            to_lower(chaine);
+            std::cout << "Chaîne en minuscules : " << chaine << std::endl;
+        } else {
+            std::cout << "Choix invalide." << std::endl;
+        }
+
+    // Exercice 8
+        char phrase[200];
+        char mot[100];
+
+        std::cout << "Entrez une phrase : ";
+        std::cin.getline(phrase, 200);
 
 
-        //Exercice 8
+        char *resultat = cherche_mot(phrase, mot);
+
+        if (resultat) {
+            std::cout << "Le mot '" << mot << "' est trouvé dans la phrase." << std::endl;
+        } else {
+            std::cout << "Mot non trouvé." << std::endl;
+        }
 
 
-        // Exercice 9
+    // Exercice 9
+        int debut, longueur;
+
+        std::cout << "Entrez une chaîne source : ";
+        std::cin.getline(source, 200);
+
+        std::cout << "Entrez la position de début : ";
+        std::cin >> debut;
+
+        std::cout << "Entrez la longueur de la sous-chaîne : ";
+        std::cin >> longueur;
+
+        sous_chaine(source, dest, debut, longueur);
+
+        std::cout << "La sous-chaîne extraite est : " << dest << std::endl;
 
 
         // Exercice 10
