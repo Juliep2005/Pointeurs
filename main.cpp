@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cctype> // Pour les caractère en majuscule et en minuscule
+#include <cstdlib> 
 
 
 int longueur(const char* chaine) {
@@ -64,16 +65,16 @@ char *cherche_char(const char *chaine, char caractere) {
     return nullptr; // Retourne nullptr si le caractère n'est pas trouvé
 }
     
-void inverse(char *chaine) {
+void inverse(char *testchaine) {
     int longueur = 0;
-    while (chaine[longueur] != '\0') {
+    while (testchaine[longueur] != '\0') {
         longueur++;
     }
 
     for (int i = 0; i < longueur / 2; i++) {
-        char temp = chaine[i];
-        chaine[i] = chaine[longueur - i - 1];
-        chaine[longueur - i - 1] = temp;
+        char temp = testchaine[i];
+        testchaine[i] = testchaine[longueur - i - 1];
+        testchaine[longueur - i - 1] = temp;
     }
 }
 
@@ -112,10 +113,52 @@ char *cherche_mot(const char *phrase, const char *mot) {
 
 
 void sous_chaine(const char *source, char *dest, int debut, int longueur) {
-    for (int i = 0; i < longueur; i++) {
-        dest[i] = source[debut + i];
+
+    int i = 0;
+    int sourceLen = 0;
+
+    // Calcul de la longueur de source
+    while (source[sourceLen] != '\0') {
+        sourceLen++;
     }
-    dest[longueur] = '\0'; // Terminer la chaîne avec '\0'
+
+    // Vérification des limites
+    if (debut >= 0 && debut + longueur <= sourceLen) {
+        for (i = 0; i < longueur; i++) {
+            dest[i] = source[debut + i];
+        }
+        dest[i] = '\0'; // Ajout du caractère de fin
+    } else {
+        dest[0] = '\0'; // Si indices invalides, dest est vide
+    }
+}
+
+void supprime_caractere(char *chaine, char caractere) {
+    int i = 0, j = 0;
+    while (chaine[i] != '\0') {
+        if (chaine[i] != caractere) {
+            chaine[j] = chaine[i];
+            j++;
+        }
+        i++;
+    }
+    chaine[j] = '\0'; // Terminaison de la chaîne
+}
+
+int compte_mots(const char *phrase) {
+    int count = 0;
+    bool inWord = false;
+
+    while (*phrase != '\0') {
+        if (*phrase != ' ' && !inWord) {
+            inWord = true;
+            count++;
+        } else if (*phrase == ' ') {
+            inWord = false;
+        }
+        phrase++;
+    }
+    return count;
 }
 
 int main() {
@@ -167,6 +210,10 @@ int main() {
         } else if (com_result != nullptr) {
         std::cout << "positif" << std::endl;
         } 
+        else {  
+        std::cout << "négatif" << std::endl;
+        }
+        
 
     //Exercice 5
         char caractere;
@@ -188,12 +235,11 @@ int main() {
 
     // Exercice 6
 
-        std::cout << "Entrez une chaîne à inverser : ";
-        std::cin.getline(chaine, sizeof(chaine));
+        char testChaine[] = "Bonjour";
 
-        inverse(chaine);
+        inverse(testChaine);
 
-        std::cout << "La chaîne inversée est : " << chaine << std::endl;
+        std::cout << "Test d'inversion de 'Bonjour' : " << testChaine << std::endl;
 
 
     // Exercice 7
@@ -249,10 +295,28 @@ int main() {
         std::cout << "La sous-chaîne extraite est : " << dest << std::endl;
 
 
-        // Exercice 10
+    // Exercice 10
 
+        std::cout << "Entrez une chaîne : ";
+        std::cin.getline(chaine, 100);
 
-        // Exercice 11
+        std::cout << "Entrez le caractère à supprimer : ";
+        std::cin >> caractere;
+
+        supprime_caractere(chaine, caractere);
+        std::cout << "Résultat après suppression : " << chaine << std::endl;
+    
+
+    // Exercice 11
+
+        std::cout << "Entrez une phrase : ";
+        std::cin.getline(phrase, sizeof(phrase));
+
+        int mots = compte_mots(phrase);
+        std::cout << "Nombre de mots dans la phrase : " << mots << std::endl;
+
+      // fin des exercices  
+
 
     return 0;
 }
