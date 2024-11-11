@@ -1,0 +1,1 @@
+Exercice donc le but est de comprendre l'utilisation des pointeurs.
