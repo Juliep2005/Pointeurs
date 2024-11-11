@@ -42,17 +42,29 @@ void concatene(char *dest, const char *source) {
     *dest = '\0'; 
 }
 
-int compare(const char *chaine1, const char *chaine2) {
-    
-    // Parcourir chaque caractère des deux chaines
-    while (*chaine1 && (*chaine1 == *chaine2)) {
-        chaine1++;
-        chaine2++;
-    }
-    
-    // la différence
-    return *chaine1 - *chaine2;
-    
+int compare_chaine(const char* chaine1, const char* chaine2) {
+    int i = 0;
+
+    // Parcourir les chaînes jusqu'à trouver une différence ou atteindre la fin
+    while (chaine1[i] != '\0' && chaine2[i] != '\0') {
+        if (chaine1[i] < chaine2[i]) {
+            return -1; // chaîne1 est lexicographiquement plus petite
+        }
+        if (chaine1[i] > chaine2[i]) {
+            return 1;  // chaîne1 est lexicographiquement plus grande
+        }
+        i++;
+        }
+        if (chaine1[i] == '\0' && chaine2[i] == '\0') {
+            return 0;  // Les chaînes sont égales
+        }
+        if (chaine1[i] == '\0') {
+            return -1; // chaîne1 est plus courte que chaîne2
+        }
+        return 1;      // chaîne1 est plus longue que chaîne2
+        
+        // Instruction de retour de secours (au cas où)
+    return 0;
 }
 
 char *cherche_char(const char *chaine, char caractere) {
@@ -199,19 +211,22 @@ int main() {
         std::cout << "La chaîne concaténée est : " << dest << std::endl;
 
     //Exercice 4 : Comparaison de chaines
-        char chaine [100];
+        char chaine1[100], chaine2[100];
 
-        std::cout << "Entrez la  chaîne  : ";
-        std::cin.getline(chaine, sizeof(chaine));
+        std::cout << "Entrez la première chaîne : ";
+        std::cin.getline(chaine1, sizeof(chaine1));
 
-        const char *com_result = chaine;
-        if (com_result == nullptr) {
-        std::cout << "0" << std::endl;
-        } else if (com_result != nullptr) {
-        std::cout << "positif" << std::endl;
-        } 
-        else {  
-        std::cout << "négatif" << std::endl;
+        std::cout << "Entrez la deuxième chaîne : ";
+        std::cin.getline(chaine2, sizeof(chaine2));
+
+        int compresult = compare_chaine(chaine1, chaine2);
+
+        if (compresult == 0) {
+            std::cout << "Les deux chaînes sont égales." << std::endl;
+        } else if (compresult > 0) {
+            std::cout << "La première chaîne est lexicographiquement plus grande." << std::endl;
+        } else {
+            std::cout << "La première chaîne est lexicographiquement plus petite." << std::endl;
         }
         
 
@@ -219,16 +234,16 @@ int main() {
         char caractere;
 
         std::cout << "Entrez une chaîne : ";
-        std::cin.getline(chaine, 100);
+        std::cin.getline(chaine2, 100);
 
         std::cout << "Entrez un caractère à rechercher : ";
         std::cin >> caractere;
 
-        char *result = cherche_char(chaine, caractere);
+        char *result = cherche_char(chaine2, caractere);
 
         if (result) {
             std::cout << "Le caractère '" << caractere << "' est trouvé à la position : " 
-                    << result - chaine << std::endl;
+                    << result - chaine2 << std::endl;
         } else {
             std::cout << "Caractère non trouvé." << std::endl;
         }
@@ -243,6 +258,7 @@ int main() {
 
 
     // Exercice 7
+        char chaine[100];
         char choix;
 
         std::cout << "Entrez une chaîne : ";
@@ -251,10 +267,10 @@ int main() {
         std::cout << "Choisissez 'M' pour majuscules ou 'm' pour minuscules : ";
         std::cin >> choix;
 
-        if (choix == 'M' || choix == 'm') {
+        if (choix == 'M') {
             to_upper(chaine);
             std::cout << "Chaîne en majuscules : " << chaine << std::endl;
-        } else if (choix == 'M' || choix == 'm') {
+        } else if ( choix == 'm') {
             to_lower(chaine);
             std::cout << "Chaîne en minuscules : " << chaine << std::endl;
         } else {
